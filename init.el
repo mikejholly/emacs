@@ -30,6 +30,10 @@
 (require 'yasnippet)
 (yas-global-mode 1)
 
+;; Git
+(require 'magit)
+(global-set-key (kbd "C-x g") 'magit-status)
+
 ;; Get PATH from shell
 (exec-path-from-shell-initialize)
 
