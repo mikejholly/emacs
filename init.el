@@ -36,6 +36,7 @@
 
 ;; Get PATH from shell
 (exec-path-from-shell-initialize)
+(exec-path-from-shell-copy-env "GOPATH")
 
 ;; Winner undo keys
 (winner-mode 1)
@@ -61,14 +62,33 @@
 (add-hook 'before-save-hook 'delete-trailing-whitespace)
 (setq-default tab-width 4)
 
-;; Auto-complete keys
+;; Linting
+(require 'flycheck)
+(add-hook 'after-init-hook #'global-flycheck-mode)
+
+;; Auto-complete
 (require 'company)
+(add-hook 'after-init-hook 'global-company-mode)
 (with-eval-after-load 'company
   (define-key company-active-map (kbd "C-n") #'company-select-next)
   (define-key company-active-map (kbd "C-p") #'company-select-previous))
 
+;; Go auto-complete
+(require 'company-go)
+(add-hook 'go-mode-hook
+		  (lambda ()
+			(set (make-local-variable 'company-backends) '(company-go))
+			(company-mode)))
+
+;; Set Go path
+(setenv "GOPATH" "/home/mike/DO/cthulhu/docode")
+
 ;; Go tests
 (global-set-key (kbd "C-c .") 'go-test-current-test)
+
+;; Git gutter highlighting
+(require 'diff-hl)
+(diff-hl-mode 1)
 
 ;; smex auto-complete
 (global-set-key (kbd "M-x") 'smex)
