@@ -38,6 +38,7 @@
 (exec-path-from-shell-initialize)
 
 ;; Winner undo keys
+(winner-mode 1)
 (global-set-key (kbd "M-[") 'winner-undo)
 (global-set-key (kbd "M-]") 'winner-redo)
 
@@ -69,5 +70,5 @@
 ;; Go tests
 (global-set-key (kbd "C-c .") 'go-test-current-test)
 
-;; smex
+;; smex auto-complete
 (global-set-key (kbd "M-x") 'smex)
