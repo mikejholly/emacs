@@ -88,7 +88,13 @@
 
 ;; Git gutter highlighting
 (require 'diff-hl)
-(diff-hl-mode 1)
+(global-diff-hl-mode 1)
 
 ;; smex auto-complete
 (global-set-key (kbd "M-x") 'smex)
+
+;; Maximize!
+(toggle-frame-fullscreen)
+
+;; JS index
+(setq js-indent-level 2)
