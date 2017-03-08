@@ -94,7 +94,7 @@
 (global-set-key (kbd "M-x") 'smex)
 
 ;; Maximize!
-(toggle-frame-fullscreen)
+(toggle-frame-maximized)
 
 ;; JS index
 (setq js-indent-level 2)
