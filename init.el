@@ -1,3 +1,4 @@
+
 ;; Add melpa
 (package-initialize)
 (add-to-list 'package-archives
@@ -58,9 +59,13 @@
 ;; Use y/n for prompt
 (defalias 'yes-or-no-p 'y-or-n-p)
 
+;; Undo tree
+(global-undo-tree-mode t)
+
 ;; Whitespace
 (add-hook 'before-save-hook 'delete-trailing-whitespace)
 (setq-default tab-width 4)
+(setq-default indent-tabs-mode nil)
 
 ;; Linting
 (require 'flycheck)
@@ -93,8 +98,30 @@
 ;; smex auto-complete
 (global-set-key (kbd "M-x") 'smex)
 
-;; Maximize!
-(toggle-frame-maximized)
-
-;; JS index
+;; JS indent
+(setq c-basic-offset 2)
 (setq js-indent-level 2)
+
+(add-hook 'json-mode-hook
+          (lambda ()
+            (make-local-variable 'js-indent-level)
+            (setq js-indent-level 2)))
+
+
+;; Robe
+(add-hook 'ruby-mode-hook 'robe-mode)
+(eval-after-load 'company
+  '(push 'company-robe company-backends))
+
+;; Disable backup and auto-save files
+(setq backup-inhibited t)
+(setq auto-save-default nil)
+
+;; Visual regexp
+(require 'visual-regexp-steroids)
+
+;; Startup
+(toggle-frame-maximized)
+(split-window-horizontally)
+(split-window-horizontally)
+(balance-windows)
