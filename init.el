@@ -44,6 +44,10 @@
 (global-set-key (kbd "M-[") 'winner-undo)
 (global-set-key (kbd "M-]") 'winner-redo)
 
+;; Ensure home and end movement keys are correct
+(global-set-key (kbd "C->") 'end-of-buffer)
+(global-set-key (kbd "C-<") 'beginning-of-buffer)
+
 ;; Ace window
 (global-set-key (kbd "M-p") 'ace-window)
 (setq aw-background nil)
@@ -86,7 +90,7 @@
 			(company-mode)))
 
 ;; Set Go path
-(setenv "GOPATH" "/home/mike/DO/cthulhu/docode")
+(setenv "GOPATH" "/home/mike/Work/cthulhu/docode")
 
 ;; Go tests
 (global-set-key (kbd "C-c .") 'go-test-current-test)
