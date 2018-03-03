@@ -4,6 +4,10 @@
 (add-to-list 'package-archives
   '("melpa" . "http://melpa.org/packages/"))
 
+;; Don't split windows
+(setq split-height-threshold 1200)
+(setq split-width-threshold 2000)
+
 ;; Vertical completions
 (require 'ido-vertical-mode)
 (ido-mode 1)
