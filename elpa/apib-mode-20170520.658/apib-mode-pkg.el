@@ -1,1 +1,0 @@
-(define-package "apib-mode" "20170520.658" "Major mode for API Blueprint files" '((markdown-mode "2.1")) :commit "6cc7c6f21b8e415b1718bb6a07ab2182e9e9dde6" :url "http://github.com/w-vi/apib-mode" :keywords '("tools" "api-blueprint"))

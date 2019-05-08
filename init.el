@@ -1,8 +1,7 @@
-
 ;; Add melpa
 (package-initialize)
 (add-to-list 'package-archives
-  '("melpa" . "http://melpa.org/packages/"))
+             '("melpa" . "http://melpa.org/packages/") t)
 
 ;; Don't split windows
 (setq split-height-threshold 1200)
@@ -15,7 +14,7 @@
 (ido-everywhere 1)
 (flx-ido-mode 1)
 (setq ido-use-faces nil)
-(setq ido-vertical-define-keys 'C-n-and-C-p-only)
+(setq ido-vertical-define-keyps 'C-n-and-C-p-only)
 
 ;; Disable UI
 (toggle-scroll-bar -1)
@@ -25,11 +24,25 @@
 ;; Default theme
 (load-theme 'dracula t)
 
+;; LSP
+(require 'lsp)
+(add-hook 'go-mode-hook #'lsp)
+
+(global-set-key (kbd "C-c C-k") 'lsp-find-definition)
+
 ;; Open scratch buffer first
 (setq inhibit-startup-screen t)
 
+;; Custom goimports
+(setq gofmt-command "goimports")
+
+(add-hook 'go-mode-hook
+          (lambda ()
+            (add-hook 'before-save-hook 'gofmt nil 'make-it-local)))
+
 ;; Start projectile
-(projectile-mode 1)
+(projectile-mode +1)
+(define-key projectile-mode-map (kbd "C-c p") 'projectile-command-map)
 
 ;; Snippets
 (require 'yasnippet)
@@ -55,10 +68,6 @@
 ;; Ace window
 (global-set-key (kbd "M-p") 'ace-window)
 (setq aw-background nil)
-
-;; Custom goimports
-(setq gofmt-command "goimports")
-(add-hook 'before-save-hook 'gofmt-before-save)
 
 ;; Tree style directories
 (require 'direx)
@@ -86,12 +95,10 @@
   (define-key company-active-map (kbd "C-n") #'company-select-next)
   (define-key company-active-map (kbd "C-p") #'company-select-previous))
 
-;; Go auto-complete
-(require 'company-go)
-(add-hook 'go-mode-hook
-		  (lambda ()
-			(set (make-local-variable 'company-backends) '(company-go))
-			(company-mode)))
+(require 'company-lsp)
+(push 'company-lsp company-backends)
+(setq company-lsp-cache-candidates 'auto)
+(setq company-idle-delay 0.5)
 
 ;; Set Go path
 (setenv "GOPATH" "/home/mike/Work/cthulhu/docode")
@@ -133,3 +140,17 @@
 (split-window-horizontally)
 (split-window-horizontally)
 (balance-windows)
+(custom-set-variables
+ ;; custom-set-variables was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ '(package-selected-packages
+   (quote
+    (dash dash-functional yasnippet-snippets yaml-mode web-mode visual-regexp-steroids undo-tree smex scss-mode rubocop rspec-mode robe rbenv rainbow-mode protobuf-mode projectile nyan-mode nov multiple-cursors magit json-mode js2-mode ido-vertical-mode ido-ubiquitous handlebars-mode haml-mode gotest golint flycheck flx-ido exec-path-from-shell dracula-theme direx direnv diminish diff-hl company-lsp company-go apib-mode ace-window))))
+(custom-set-faces
+ ;; custom-set-faces was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ )
