@@ -4,5 +4,6 @@
  (magit-commit
   ("--all"))
  (magit-pull nil)
- (magit-push nil)
+ (magit-push nil
+             ("--force-with-lease"))
  (magit-stash nil))
