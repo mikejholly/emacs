@@ -63,6 +63,10 @@
   :config
   (which-key-mode 1))
 
+(use-package markdown-mode
+  :config
+  (add-hook 'markdown-mode-hook #'flyspell-mode))
+
 (use-package dashboard
   :ensure t
   :config
@@ -80,6 +84,7 @@
   (setq gofmt-command "gofmt")
   :config
   (add-hook 'go-mode-hook #'hs-minor-mode)
+  (add-hook 'go-mode-hook #'flyspell-prog-mode)
   (add-hook 'before-save-hook #'gofmt-before-save))
 
 (use-package projectile
@@ -201,7 +206,8 @@
 
 (use-package ido
   :init
-  (setq ido-use-faces t)
+  (setq ido-enable-flex-matching t)
+  (setq ido-use-faces nil)
   :config
   (ido-mode 1)
   (ido-everywhere 1))
