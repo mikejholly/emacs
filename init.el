@@ -18,6 +18,9 @@
 (eval-when-compile
   (require 'use-package))
 
+(require 'use-package-ensure)
+(setq use-package-always-ensure t)
+
 ;; Performance
 (setq gc-cons-threshold 100000000)
 (setq read-process-output-max (* 1024 1024))
@@ -36,7 +39,10 @@
 (defalias 'yes-or-no-p 'y-or-n-p)
 
 ;; Ensure correct PATH value
-(exec-path-from-shell-initialize)
+(use-package exec-path-from-shell
+  :ensure t
+  :init
+  (exec-path-from-shell-initialize))
 
 ;; Set max comment and text line length
 (setq-default fill-column 80)
@@ -52,6 +58,7 @@
 (windmove-default-keybindings 'meta)
 
 (use-package web-mode
+  :ensure t
   :custom
   (web-mode-markup-indent-offset 2)
   (web-mode-css-indent-offset 2)
@@ -60,10 +67,12 @@
   (add-to-list 'auto-mode-alist '("\\.vue\\'" . web-mode)))
 
 (use-package which-key
+  :ensure t
   :config
   (which-key-mode 1))
 
 (use-package markdown-mode
+  :ensure t
   :config
   (add-hook 'markdown-mode-hook #'flyspell-mode))
 
@@ -80,35 +89,36 @@
 (setq auto-save-default nil)
 
 (use-package go-mode
+  :ensure t
   :init
   (setq gofmt-command "gofmt")
+  :bind (("C-c h" . hs-hide-block)
+         ("C-c s" . hs-show-block))
   :config
   (add-hook 'go-mode-hook #'hs-minor-mode)
   (add-hook 'go-mode-hook #'flyspell-prog-mode)
   (add-hook 'before-save-hook #'gofmt-before-save))
 
 (use-package projectile
+  :ensure t
   :config
   (projectile-mode +1)
   (define-key projectile-mode-map (kbd "C-c p") 'projectile-command-map))
 
 (use-package yasnippet
+  :ensure t
   :config
   (yas-global-mode 1)
   (add-to-list 'load-path
               "/home/mike/.emacs.d/snippets"))
 
-(use-package hs-minor-mode
-  :bind (("C-c h" . hs-hide-block)
-         ("C-c s" . hs-show-block))
-  :config
-  (add-hook 'go-mode-hook #'hs-minor-mode))
-
 (use-package magit
+  :ensure t
   :config
   (bind-key "C-x g" 'magit-status))
 
 (use-package direx
+  :ensure t
   :config
   (bind-key "C-x C-j" 'direx:jump-to-directory))
 
@@ -121,12 +131,14 @@
   (global-undo-tree-mode 1))
 
 (use-package winner
+  :ensure t
   :init
   (winner-mode 1)
   (bind-key "M-[" 'winner-undo)
   (bind-key "M-]" 'winner-redo))
 
 (use-package ace-window
+  :ensure t
   :init
   (setq aw-background nil)
   :config
@@ -138,20 +150,24 @@
   (bind-key "M-p" 'ace-window))
 
 (use-package smex
+  :ensure t
   :config
   (bind-key "M-x" 'smex))
 
 (use-package flx-ido
+  :ensure t
   :config
   (flx-ido-mode 1))
 
 (use-package ido-vertical-mode
+  :ensure t
   :init
   (setq ido-vertical-define-keys 'C-n-and-C-p-only)
   :config
   (ido-vertical-mode 1))
 
 (use-package diff-hl
+  :ensure t
   :config
   (global-diff-hl-mode 1))
 
@@ -169,6 +185,7 @@
   (global-flycheck-mode))
 
 (use-package company
+  :ensure t
   :bind (:map company-active-map
          ("C-n" . company-select-next)
          ("C-p" . company-select-previous))
@@ -176,6 +193,7 @@
   (global-company-mode +1))
 
 (use-package lsp-mode
+  :ensure t
   :hook ((go-mode . lsp) (typescript-mode . lsp))
   :init
   (setq lsp-enable-imenu nil)
@@ -189,15 +207,18 @@
   :commands lsp)
 
 (use-package goto-last-change
+  :ensure t
   :config
   (bind-key "C-c l" 'goto-last-change))
 
 (use-package focus
+  :ensure t
   :config
   (add-to-list 'focus-mode-to-thing '(go-mode . lsp-folding-range))
   (focus-mode 0))
 
 (use-package lsp-ui
+  :ensure t
   :commands lsp-ui-mode
   :init
   (setq lsp-enable-imenu nil)
@@ -205,6 +226,7 @@
   (setq lsp-ui-doc-enable nil))
 
 (use-package ido
+  :ensure
   :init
   (setq ido-enable-flex-matching t)
   (setq ido-use-faces nil)
@@ -213,10 +235,12 @@
   (ido-everywhere 1))
 
 (use-package ido-completing-read+
+  :ensure t
   :config
   (ido-ubiquitous-mode 1))
 
-(use-package visual-regexp-steroids)
+(use-package visual-regexp-steroids
+  :ensure t)
 
 (use-package salt-mode
   :ensure t)
@@ -225,6 +249,7 @@
   :ensure t)
 
 (use-package beacon
+  :ensure t
   :config
   (beacon-mode 1)
   (setq beacon-blink-duration 0.3)
@@ -232,7 +257,11 @@
   (setq beacon-color "#bd93f9")
   (setq beacon-size 20))
 
+(use-package earthfile-mode
+  :ensure t)
+
 (use-package visual-regexp-steroids
+  :ensure t
   :config
   (bind-key "C-c r" 'vr/replace)
   (bind-key "C-s" 'vr/isearch-forward)
@@ -261,7 +290,10 @@
 ;; (balance-windows)
 
 ;; Default theme
-(load-theme 'dracula t)
+(use-package dracula-theme
+  :ensure t
+  :init
+  (load-theme 'dracula t))
 
 ;; Keep 'Customize' stuff separated
 (setq custom-file (concat user-emacs-directory "custom.el"))
