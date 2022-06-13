@@ -66,6 +66,9 @@
   :config
   (add-to-list 'auto-mode-alist '("\\.vue\\'" . web-mode)))
 
+(use-package git-link
+  :ensure t)
+
 (use-package which-key
   :ensure t
   :config
@@ -87,6 +90,16 @@
 ;; Backup files
 (setq backup-inhibited t)
 (setq auto-save-default nil)
+
+(use-package yascroll
+  :ensure t
+  :init
+  (global-yascroll-bar-mode t))
+
+(use-package dimmer
+  :ensure t
+  :init
+  (dimmer-mode t))
 
 (use-package go-mode
   :ensure t
@@ -151,8 +164,14 @@
 
 (use-package smex
   :ensure t
+  :init
+  (smex-initialize)
   :config
   (bind-key "M-x" 'smex))
+
+(use-package expand-region
+  :ensure t
+  :bind (("C-=" . er/expand-region)))
 
 (use-package flx-ido
   :ensure t
