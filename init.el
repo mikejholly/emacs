@@ -21,6 +21,21 @@
 (require 'use-package-ensure)
 (setq use-package-always-ensure t)
 
+;; Debugging helpers
+;; (setq lsp-log-io t)
+
+;; Set a custom bell sound
+(setq ring-bell-function
+      (lambda ()
+        (start-process "custom-sound" nil "paplay" "--volume=40000" "/home/mike/.emacs.d/audio/sound51.wav")))
+
+;; Ensure integration tests are evaluated by Gopls
+(setenv "GOFLAGS" "-tags=integration")
+
+;; Disable Lisp mode in Scratch
+(setq initial-major-mode 'text-mode)
+(setq initial-scratch-message "Scratch!\n")
+
 ;; Performance
 (setq gc-cons-threshold 100000000)
 (setq read-process-output-max (* 1024 1024))
@@ -30,7 +45,7 @@
 (setq split-width-threshold 2000)
 
 ;; Disable default UI
-(toggle-scroll-bar -1)
+(scroll-bar-mode -1)
 (menu-bar-mode -1)
 (tool-bar-mode -1)
 (setq inhibit-startup-screen t)
@@ -64,6 +79,7 @@
   (web-mode-css-indent-offset 2)
   (web-mode-code-indent-offset 2)
   :config
+  (add-to-list 'auto-mode-alist '("\\.tsx\\'" . web-mode))
   (add-to-list 'auto-mode-alist '("\\.vue\\'" . web-mode)))
 
 (use-package git-link
@@ -88,7 +104,9 @@
                           (projects . 12))))
 
 ;; Backup files
-(setq backup-inhibited t)
+(setq backup-directory-alist `(("." . "~/.emacs/backups")))
+(setq auto-save-file-name-transforms
+      `((".*" "~/.emacs/backups" t)))
 (setq auto-save-default nil)
 
 (use-package yascroll
@@ -104,7 +122,10 @@
 (use-package go-mode
   :ensure t
   :init
-  (setq gofmt-command "gofmt")
+  (setq gofmt-command "goimports")
+  (setq gofmt-args '())
+  ;;(setq gofmt-command "goimportssort")
+  ;;(setq gofmt-args '("-w" "-local" "github.com/earthly"))
   :bind (("C-c h" . hs-hide-block)
          ("C-c s" . hs-show-block))
   :config
@@ -115,6 +136,7 @@
 (use-package projectile
   :ensure t
   :config
+  (setq projectile-use-git-grep t)
   (projectile-mode +1)
   (define-key projectile-mode-map (kbd "C-c p") 'projectile-command-map))
 
@@ -143,12 +165,13 @@
   (setq undo-tree-history-directory-alist '(("." . "~/.emacs.d/undo")))
   (global-undo-tree-mode 1))
 
-(use-package winner
-  :ensure t
+(use-package window-history
+  :load-path "~/.emacs.d/lisp/"
+  :commands (window-history-mode window-history-back window-history-forward)
   :init
-  (winner-mode 1)
-  (bind-key "M-[" 'winner-undo)
-  (bind-key "M-]" 'winner-redo))
+  (window-history-mode 1)
+  :bind (("M-[" . window-history-back)
+         ("M-]" . window-history-forward)))
 
 (use-package ace-window
   :ensure t
@@ -304,15 +327,27 @@
   (bind-key "C-c ," 'go-test-current-benchmark)
   (bind-key "C-c ." 'go-test-current-test))
 
+(use-package chatgpt-shell
+  :ensure t
+  :config
+  (setq chatgpt-shell-openai-key "***"))
+
 ;; Start with a double window
-;; (split-window-horizontally)
+(split-window-horizontally)
 ;; (balance-windows)
+(setq initial-frame-alist '((width . 265) (height . 65)))
+(setq default-frame-alist '((width . 265) (height . 65)))
 
 ;; Default theme
 (use-package dracula-theme
   :ensure t
   :init
-  (load-theme 'dracula t))
+  (load-theme 'dracula t)
+  :config
+  ;; Missing colors were confusing chatgpt-shell
+  (set-face-attribute 'region nil
+                    :background "#f1fa8c"
+                    :foreground "#282a36"))
 
 ;; Keep 'Customize' stuff separated
 (setq custom-file (concat user-emacs-directory "custom.el"))
