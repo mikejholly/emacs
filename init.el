@@ -330,7 +330,7 @@
 (use-package chatgpt-shell
   :ensure t
   :config
-  (setq chatgpt-shell-openai-key "***"))
+  (setq chatgpt-shell-openai-key "****"))
 
 ;; Start with a double window
 (split-window-horizontally)
