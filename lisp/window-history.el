@@ -45,8 +45,7 @@
           (setq window-history-stack
                 (last window-history-stack window-history-max-length)))
         ;; Update index to point to the new latest
-        (setq window-history-index (1- (length window-history-stack)))
-        (message "[window-history] saved layout, index now %d" window-history-index)))))
+        (setq window-history-index (1- (length window-history-stack)))))))
 
 (defun window-history--restore (index)
   "Restore INDEX layout and prevent it from being immediately re-saved."

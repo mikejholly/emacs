@@ -24,10 +24,22 @@
 ;; Debugging helpers
 ;; (setq lsp-log-io t)
 
+(setq initial-frame-alist '((width . 200) (height . 55)))
+(setq default-frame-alist '((width . 200) (height . 55)))
+
 ;; Set a custom bell sound
 (setq ring-bell-function
       (lambda ()
         (start-process "custom-sound" nil "paplay" "--volume=40000" "/home/mike/.emacs.d/audio/sound51.wav")))
+
+(set-face-attribute 'default nil :family "Victor Mono" :height 120 :weight 'semibold)
+
+(use-package ligature
+  :ensure t
+  :config
+  (ligature-set-ligatures 'prog-mode
+                          '("->" "<-" "=>" "<=" "==" "!=" "::" "===" ">>" "<<" "++" "--" "**" ":="))
+  (global-ligature-mode t))
 
 ;; Ensure integration tests are evaluated by Gopls
 (setenv "GOFLAGS" "-tags=integration")
@@ -281,9 +293,6 @@
   :config
   (ido-ubiquitous-mode 1))
 
-(use-package visual-regexp-steroids
-  :ensure t)
-
 (use-package salt-mode
   :ensure t)
 
@@ -330,13 +339,13 @@
 (use-package chatgpt-shell
   :ensure t
   :config
-  (setq chatgpt-shell-openai-key "****"))
+  (setq chatgpt-shell-openai-key (getenv "OPENAI_API_KEY")))
 
-;; Start with a double window
-(split-window-horizontally)
-;; (balance-windows)
-(setq initial-frame-alist '((width . 265) (height . 65)))
-(setq default-frame-alist '((width . 265) (height . 65)))
+;; Split window horizontally on start-up
+(add-hook 'emacs-startup-hook
+          (lambda ()
+            (when (one-window-p)
+              (split-window-horizontally))))
 
 ;; Default theme
 (use-package dracula-theme

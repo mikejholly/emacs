@@ -1,0 +1,8 @@
+# -*- mode: snippet -*-
+# name: if err != nil (empty)
+# key: err
+# condition: (looking-back "\\_<err")
+# --
+if err != nil {
+    $0
+}

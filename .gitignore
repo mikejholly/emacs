@@ -18,3 +18,5 @@ auto-save-list
 .lsp-session-v1
 bookmarks
 init.el~
+\#init.el\#
+eln-cache
